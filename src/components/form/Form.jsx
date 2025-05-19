@@ -37,9 +37,14 @@ const Form = () => {
         console.log("salom");
     }
 
+    const handleDelete = (index) => {
+        const newData = [...data];
+        newData.splice(index, 1);
+        setData(newData);
+    }
+
     console.log(data);
     console.log("hello");
-    
 
   return ( 
     <div className='container mx-auto flex flex-col items-center justify-center'>
@@ -91,11 +96,13 @@ const Form = () => {
 
         <div className='container mx-auto grid grid-cols-3 gap-5 mb-10'>
             {
-                data?.map((user) => (
-                    <div className="w-full max-w-md mx-auto my-2 bg-white relative rounded-2xl shadow-2xl p-8 space-y-6 min-h-[480px] hover:scale-101">
+                data?.map((user, index) => (
+                    <div key={index} className="w-full max-w-md mx-auto my-2 bg-white relative rounded-2xl shadow-2xl p-8 space-y-6 min-h-[480px] hover:scale-101">
                       
                       <div className='absolute right-7'>
-                        <FaRegHeart className='text-2xl cursor-pointer hover:text-red-500' />
+                        <button>
+                            <FaRegHeart className='text-2xl cursor-pointer hover:text-red-500' />
+                        </button>
                       </div>  
 
                       <div className="w-28 h-28 mx-auto rounded-full bg-gray-200 shadow-inner mt-2 flex items-center justify-center">
@@ -130,8 +137,12 @@ const Form = () => {
                       </div>
 
                       <div className='flex items-center justify-between bottom-0 right-0'>
-                        <FaRegEdit className='text-2xl text-blue-500 cursor-pointer hover:text-blue-700' />
-                        <MdDeleteOutline className='text-[25px] text-red-500 cursor-pointer hover:text-red-700' />
+                        <button>
+                            <FaRegEdit className='text-2xl text-blue-500 cursor-pointer hover:text-blue-700' />
+                        </button>
+                        <button onClick={() => handleDelete(index)}>
+                            <MdDeleteOutline className='text-[25px] text-red-500 cursor-pointer hover:text-red-700' />
+                        </button>
                       </div>
                     </div>
                 ))
