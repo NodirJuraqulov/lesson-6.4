@@ -12,10 +12,13 @@ const Form = () => {
     const [id, setId] = useState("")
     const [number, setNumber] = useState("")
     const [confirm, setConfirm] = useState("")
+    const [gender, setGender] = useState("")
 
     const [data, setData] = useState([])
 
     const [showForm, setShowForm] = useState(false);
+
+    const [editIndex, setEditIndex] = useState(null)
 
     console.log("book render");
     console.log(nameRef.current);
@@ -31,9 +34,20 @@ const Form = () => {
             id: id,
             phone: number,
             confirm_password: confirm,
+            gender: gender
         }
 
-        setData([...data, newUser])
+        // setData([...data, newUser])
+        if (editIndex !== null) {
+          // Update mavjud user
+          const updatedData = [...data]
+          updatedData[editIndex] = newUser
+          setData(updatedData)
+          setEditIndex(null) // Tahrirlash rejimini tozalash
+        } else {
+          // Yangi user qo‘shish
+          setData([...data, newUser])
+        }
 
         setShowForm(false)
 
@@ -54,6 +68,20 @@ const Form = () => {
         setData(newData);
     }
 
+    const handleEdit = (index) => {
+      const user = data[index]
+
+      nameRef.current.value = user.name
+      emailRef.current.value = user.email
+      passRef.current.value = user.password
+      setId(user.id)
+      setNumber(user.phone)
+      setConfirm(user.confirm_password)
+
+      setEditIndex(index)
+      setShowForm(true)  
+    }
+
     console.log(data);
     console.log("hello");
 
@@ -63,7 +91,7 @@ const Form = () => {
           <h1 className="text-3xl font-bold text-gray-800">User</h1>
           <button
             onClick={() => setShowForm(true)}
-            className="text-white bg-blue-600 px-6 py-2 rounded-xl text-xl hover:bg-blue-700 transition"
+            className="text-white bg-blue-600 font-medium px-6 py-2 cursor-pointer rounded-xl text-xl hover:bg-blue-700 transition"
           >
             Registration
           </button>
@@ -111,18 +139,18 @@ const Form = () => {
 
                         <div className='flex flex-col'>
                             <label className="inline-flex items-center mr-4">
-                            <input type="radio" name="gender" value="male" className="form-radio text-blue-600" />
+                            <input type="radio" name="gender" className="form-radio text-blue-600" value="male" onChange={(e) => setGender(e.target.value)} checked={gender === "male"} />
                             <span className="ml-2 text-gray-700 text-lg font-medium">Male</span>
                             </label>
 
                             <label className="inline-flex items-center">
-                            <input type="radio" name="gender" value="female" className="form-radio text-pink-500" />
+                            <input type="radio" name="gender" className="form-radio text-pink-500" value="female" onChange={(e) => setGender(e.target.value)} checked={gender === "female"} />
                             <span className="ml-2 text-gray-700 text-lg font-medium">Female</span>
                             </label>
                         </div>
                     </div>
 
-                    <button  type="submit" onClick={() => handleSubmit} className='mt-22 border-1 border-gray-200 rounded-xl py-2 px-5 bg-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-2xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] active:drop-shadow-[2px_2px_3px_rgba(0,0,0,0.4)] transition-colors duration-200'>Register</button>
+                    <button  type="submit" onClick={handleSubmit} className='mt-22 border-1 border-gray-200 rounded-xl py-2 px-5 bg-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-2xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] active:drop-shadow-[2px_2px_3px_rgba(0,0,0,0.4)] transition-colors duration-200'>Register</button>
                 </form>
             </div>
         )}
@@ -130,7 +158,7 @@ const Form = () => {
 
         <div className='container mx-auto grid grid-cols-3 gap-5 mb-10 mt-[120px]'>
             {
-                data?.map((user, index) => (
+                data.length > 0 && data?.map((user, index) => (
                     <div key={index} className="w-full max-w-md mx-auto my-2 bg-white relative rounded-2xl shadow-2xl p-8 space-y-6 min-h-[480px] hover:scale-101">
                       
                       <div className='absolute right-7'>
@@ -148,7 +176,7 @@ const Form = () => {
                         <p className="text-lg text-gray-600 font-medium">ID: {user.id}</p>
                         <p className="text-lg text-gray-600">Email: {user.email}</p>
                         <p className="text-lg text-gray-600">Phone: {user.phone}</p>
-                        <p className="text-lg text-gray-600">Gender: Male</p>
+                        <p className="text-lg text-gray-600">Gender: {user.gender}</p>
                       </div>
 
                       <div className="flex justify-center space-x-6 pt-4">
@@ -171,7 +199,7 @@ const Form = () => {
                       </div>
 
                       <div className='flex items-center justify-between bottom-0 right-0'>
-                        <button>
+                        <button onClick={() => handleEdit(index)}>
                             <FaRegEdit className='text-2xl text-blue-500 cursor-pointer hover:text-blue-700' />
                         </button>
                         <button onClick={() => handleDelete(index)}>
