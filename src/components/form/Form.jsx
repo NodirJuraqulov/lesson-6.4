@@ -15,6 +15,8 @@ const Form = () => {
 
     const [data, setData] = useState([])
 
+    const [showForm, setShowForm] = useState(false);
+
     console.log("book render");
     console.log(nameRef.current);
 
@@ -33,6 +35,15 @@ const Form = () => {
 
         setData([...data, newUser])
 
+        setShowForm(false)
+
+        setId("")
+        setNumber("")
+        setConfirm("")
+        nameRef.current.value = ""
+        emailRef.current.value = ""
+        passRef.current.value = ""
+
         console.log(newUser); 
         console.log("salom");
     }
@@ -48,53 +59,76 @@ const Form = () => {
 
   return ( 
     <div className='container mx-auto flex flex-col items-center justify-center'>
-        <form onSubmit={handleSubmit} action="" className='flex items-center justify-center flex-col rounded-2xl relative w-200 p-8 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.2)] my-20'>
-            <h2 className='text-5xl font-semibold mb-10 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]'>Registration</h2>
+        <header className="w-full shadow-md bg-white py-4 px-10 flex items-center justify-between fixed top-0 left-0 z-10">
+          <h1 className="text-3xl font-bold text-gray-800">User</h1>
+          <button
+            onClick={() => setShowForm(true)}
+            className="text-white bg-blue-600 px-6 py-2 rounded-xl text-xl hover:bg-blue-700 transition"
+          >
+            Registration
+          </button>
+        </header>
 
-            <div className='flex items-center gap-20 px-10'>
-                <div className="ref">
-                    <label htmlFor="name" className='text-xl font-medium block mb-2'>Full Name</label>
-                    <input required ref={nameRef} type="text" id='name' placeholder='Enter your name' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+        {showForm && (
+            <div className="fixed top-0 left-0 w-full h-full z-20 flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }} onClick={() => setShowForm(false)}>
+                <form onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit} action="" className='flex items-center justify-center flex-col rounded-2xl relative w-200 p-8 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.2)] my-20'>
+                    <h2 className='text-5xl font-semibold mb-10 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]'>Registration</h2>
 
-                    <label htmlFor="email" className='text-xl font-medium block mb-2'>Email</label>
-                    <input required ref={emailRef} type="email" id='email' placeholder='Enter your email' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="absolute top-4 right-4 text-gray-500 text-2xl hover:text-black"
+                    >
+                      ×
+                    </button>
 
-                    <label htmlFor="password" className='text-xl font-medium block mb-2'>Password</label>
-                    <input required ref={passRef} type="password" id='password' placeholder='Enter your password' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
-                </div>
+                    <div className='flex items-center gap-20 px-10'>
+                        <div className="ref">
+                            <label htmlFor="name" className='text-xl font-medium block mb-2'>Full Name</label>
+                            <input required ref={nameRef} type="text" id='name' placeholder='Enter your name' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
 
-                <div className="state">
-                    <label htmlFor="id" className='text-xl font-medium block mb-2'>Registered Id</label>
-                    <input required value={id} onChange={(e1) => setId(e1.target.value)} type="text" id='id' placeholder='Enter your Id' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+                            <label htmlFor="email" className='text-xl font-medium block mb-2'>Email</label>
+                            <input required ref={emailRef} type="email" id='email' placeholder='Enter your email' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
 
-                    <label htmlFor="number" className='text-xl font-medium block mb-2'>Phone Number</label>
-                    <input required value={number} onChange={(e2) => setNumber(e2.target.value)} type="number" id='number' placeholder='Enter your number' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+                            <label htmlFor="password" className='text-xl font-medium block mb-2'>Password</label>
+                            <input required ref={passRef} type="password" id='password' placeholder='Enter your password' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+                        </div>
 
-                    <label htmlFor="confirm" className='text-xl font-medium block mb-2'>Confirm Password</label>
-                    <input required value={confirm} onChange={(e3) => setConfirm(e3.target.value)} type="password" id='confirm' placeholder='Confirm your password' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
-                </div>
+                        <div className="state">
+                            <label htmlFor="id" className='text-xl font-medium block mb-2'>Registered Id</label>
+                            <input required value={id} onChange={(e1) => setId(e1.target.value)} type="text" id='id' placeholder='Enter your Id' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+
+                            <label htmlFor="number" className='text-xl font-medium block mb-2'>Phone Number</label>
+                            <input required value={number} onChange={(e2) => setNumber(e2.target.value)} type="number" id='number' placeholder='Enter your number' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+
+                            <label htmlFor="confirm" className='text-xl font-medium block mb-2'>Confirm Password</label>
+                            <input required value={confirm} onChange={(e3) => setConfirm(e3.target.value)} type="password" id='confirm' placeholder='Confirm your password' className='text-xl mb-6 border-1 border-gray-300 rounded-xl py-3 px-5 pr-20 bg-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]' />
+                        </div>
+                    </div>
+
+                    <div className='flex absolute bottom-24 left-10'>
+                        <p className='text-3xl font-semibold inline mr-10'>Gender</p>
+
+                        <div className='flex flex-col'>
+                            <label className="inline-flex items-center mr-4">
+                            <input type="radio" name="gender" value="male" className="form-radio text-blue-600" />
+                            <span className="ml-2 text-gray-700 text-lg font-medium">Male</span>
+                            </label>
+
+                            <label className="inline-flex items-center">
+                            <input type="radio" name="gender" value="female" className="form-radio text-pink-500" />
+                            <span className="ml-2 text-gray-700 text-lg font-medium">Female</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button  type="submit" onClick={() => handleSubmit} className='mt-22 border-1 border-gray-200 rounded-xl py-2 px-5 bg-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-2xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] active:drop-shadow-[2px_2px_3px_rgba(0,0,0,0.4)] transition-colors duration-200'>Register</button>
+                </form>
             </div>
+        )}
 
-            <div className='flex absolute bottom-24 left-10'>
-                <p className='text-3xl font-semibold inline mr-10'>Gender</p>
 
-                <div className='flex flex-col'>
-                    <label className="inline-flex items-center mr-4">
-                      <input type="radio" name="gender" value="male" className="form-radio text-blue-600" />
-                      <span className="ml-2 text-gray-700 text-lg font-medium">Male</span>
-                    </label>
-
-                    <label className="inline-flex items-center">
-                      <input type="radio" name="gender" value="female" className="form-radio text-pink-500" />
-                      <span className="ml-2 text-gray-700 text-lg font-medium">Female</span>
-                    </label>
-                </div>
-            </div>
-
-            <button  type="submit" onClick={() => handleSubmit} className='mt-22 border-1 border-gray-200 rounded-xl py-2 px-5 bg-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-2xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] active:drop-shadow-[2px_2px_3px_rgba(0,0,0,0.4)] transition-colors duration-200'>Register</button>
-        </form>
-
-        <div className='container mx-auto grid grid-cols-3 gap-5 mb-10'>
+        <div className='container mx-auto grid grid-cols-3 gap-5 mb-10 mt-[120px]'>
             {
                 data?.map((user, index) => (
                     <div key={index} className="w-full max-w-md mx-auto my-2 bg-white relative rounded-2xl shadow-2xl p-8 space-y-6 min-h-[480px] hover:scale-101">
